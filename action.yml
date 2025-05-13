@@ -5,10 +5,12 @@ inputs:
     required: true
     description: |
       Gradle configuration cache encryption key.
-      Generate a key by running `openssl rand -base64 16` (https://docs.gradle.org/8.6/userguide/configuration_cache.html#config_cache:secrets:configuring_encryption_key)
+      Generate a key by following the Gradle docs (https://docs.gradle.org/8.6/userguide/configuration_cache.html#config_cache:secrets:configuring_encryption_key)
   jvm-version:
     required: false
-    description: "Version of the JVM to use"
+    description: |
+      JVM version to use.
+      See: https://github.com/actions/setup-java?tab=readme-ov-file#supported-version-syntax
     default: '21'
   jvm-distribution:
     required: false
