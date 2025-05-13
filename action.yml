@@ -1,0 +1,41 @@
+name: "Java & Gradle setup"
+description: "Sets up Java & Gradle with caching support."
+inputs:
+  gradle-cache-key:
+    required: true
+    description: |
+      Gradle configuration cache encryption key.
+      Generate a key by running `openssl rand -base64 16` (https://docs.gradle.org/8.6/userguide/configuration_cache.html#config_cache:secrets:configuring_encryption_key)
+  jvm-version:
+    required: false
+    description: "Version of the JVM to use"
+    default: '21'
+  jvm-distribution:
+    required: false
+    description: |
+      JVM distribution name.
+      See: https://github.com/actions/setup-java?tab=readme-ov-file#supported-distributions
+    default: 'temurin'
+  gradlew-path:
+    required: false
+    description: "Path to the `gradlew` executable"
+    default: './gradlew'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up JDK ${{ inputs.jvm-version }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ inputs.jvm-version }}
+        distribution: ${{ inputs.jvm-distribution }}
+
+    - name: Fix Gradle permissions
+      if: runner.os == 'Linux'
+      run: chmod +x ${{ inputs.gradlew-path }}
+      shell: sh
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        cache-encryption-key: ${{ inputs.gradle-cache-key }}
